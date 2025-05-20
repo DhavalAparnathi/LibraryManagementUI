@@ -117,8 +117,13 @@
     </h2>
     <form [formGroup]="userForm" (ngSubmit)="submitUserForm()">
       <div class="mb-4">
-        <label class="block font-medium mb-1">User Name</label>
-        <input formControlName="userName" type="text" class="input-bordered" />
+        <label class="block font-medium mb-1">User Name*</label>
+        <input
+          placeholder="Enter user name"
+          formControlName="userName"
+          type="text"
+          class="input-bordered"
+        />
         <div
           *ngIf="
             userForm.get('userName')?.touched &&
@@ -132,10 +137,11 @@
 
       <div class="mb-4" *ngIf="!selectedUser?.id">
         <label class="block font-medium mb-1">
-          Password
+          Password*
           <span></span>
         </label>
         <input
+          placeholder="Enter password for user"
           formControlName="passwordHash"
           [type]="passwordVisible ? 'text' : 'password'"
           class="input-bordered"
@@ -160,8 +166,13 @@
       </div>
 
       <div class="mb-4">
-        <label class="block font-medium mb-1">Email</label>
-        <input formControlName="email" type="email" class="input-bordered" />
+        <label class="block font-medium mb-1">Email*</label>
+        <input
+          placeholder="Enter email"
+          formControlName="email"
+          type="email"
+          class="input-bordered"
+        />
         <div
           *ngIf="
             userForm.get('email')?.touched && userForm.get('email')?.invalid
@@ -173,8 +184,9 @@
       </div>
 
       <div class="mb-4">
-        <label class="block font-medium mb-1">Phone Number</label>
+        <label class="block font-medium mb-1">Phone Number*</label>
         <input
+          placeholder="Enter phone number"
           formControlName="phoneNumber"
           type="text"
           class="input-bordered"

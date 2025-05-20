@@ -6,7 +6,7 @@ export const ApiEndpoints = {
   ISSUE_BOOK: 'issue/issue-book',
   RETURN_BOOK: 'issue/return-book',
   UPSERT_BOOK: 'books/upsert',
-  BOOK_LIST_GENRES: 'books/genres',
+  BOOK_LIST_GENRES: 'books/get-all-genres',
   USERS: 'users',
   UPSERT_USER: 'users/upsert',
   USER_LIST: 'users/list',

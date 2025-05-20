@@ -31,7 +31,7 @@ export class BookListingComponent implements OnInit {
   bookForm: FormGroup;
   selectedBook: any = null;
 
-  filters = { name: '', author: '', genre: '' };
+  filters = { name: '', author: '', genreId: 0 };
   sortColumn = 'Name';
   sortDirection = 'ASC';
   pageNumber = 1;
@@ -49,7 +49,7 @@ export class BookListingComponent implements OnInit {
         id: [0],
         name: ['', Validators.required],
         author: ['', Validators.required],
-        genre: ['', Validators.required],
+        genreId: ['', Validators.required],
         totalCopies: [1, [Validators.required, Validators.min(1)]],
         availableCopies: [0, [Validators.required, Validators.min(0)]],
       },
@@ -77,7 +77,7 @@ export class BookListingComponent implements OnInit {
         id: 0,
         name: '',
         author: '',
-        genre: '',
+        genreId: '',
         totalCopies: 0,
         availableCopies: 0,
       });
@@ -136,8 +136,17 @@ export class BookListingComponent implements OnInit {
           this.books = this.books.filter((u) => u.id !== bookId);
           this._toast.showSuccess('Book deleted successfully');
         },
-        error: () => {
-          this._toast.showError('Failed to delete book');
+        error: (error) => {
+          if (
+            error?.error?.message ===
+            'Cannot delete the book because it is currently issued to a user.'
+          ) {
+            this._toast.showError(
+              'This book cannot be deleted because it is currently issued.'
+            );
+          } else {
+            this._toast.showError('Failed to delete book.');
+          }
         },
       });
     }
@@ -183,6 +192,8 @@ export class BookListingComponent implements OnInit {
 
     const formValue = this.bookForm.getRawValue();
 
+    formValue.genreId = Number(formValue.genreId);
+
     if (!formValue.id || formValue.id === 0) {
       formValue.availableCopies = formValue.totalCopies;
       delete formValue.id;
@@ -225,7 +236,6 @@ export class BookListingComponent implements OnInit {
           actual: available,
         };
       }
-      console.log('expectedAvailable', expectedAvailable);
 
       return Object.keys(errors).length ? errors : null;
     };

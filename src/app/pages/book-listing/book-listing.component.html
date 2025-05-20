@@ -23,13 +23,13 @@
     />
 
     <select
-      [(ngModel)]="filters.genre"
+      [(ngModel)]="filters.genreId"
       (change)="onFilterChange()"
       class="input-bordered me-2"
     >
-      <option value="">All Genres</option>
-      <option *ngFor="let genre of genres" [value]="genre">
-        {{ genre }}
+      <option value="0">All Genres</option>
+      <option *ngFor="let genre of genres" [value]="genre.genreId">
+        {{ genre.name }}
       </option>
     </select>
 
@@ -89,7 +89,9 @@
         </td>
 
         <td>{{ book.author }}</td>
-        <td [ngClass]="{ tdNumber: !book.genre }">{{ book.genre || "-" }}</td>
+        <td [ngClass]="{ tdNumber: !book.genreName }">
+          {{ book.genreName || "-" }}
+        </td>
         <td class="tdNumber">{{ book.totalCopies }}</td>
         <td class="tdNumber">{{ book.availableCopies }}</td>
         <td *ngIf="isAdmin">
@@ -154,8 +156,13 @@
     </h2>
     <form [formGroup]="bookForm" (ngSubmit)="submitBookForm()">
       <div class="mb-4">
-        <label class="block font-medium mb-1">Name</label>
-        <input formControlName="name" type="text" class="input-bordered" />
+        <label class="block font-medium mb-1">Name*</label>
+        <input
+          placeholder="Enter book name"
+          formControlName="name"
+          type="text"
+          class="input-bordered"
+        />
         <div
           *ngIf="bookForm.get('name')?.touched && bookForm.get('name')?.invalid"
           class="text-danger text-sm"
@@ -164,8 +171,13 @@
         </div>
       </div>
       <div class="mb-4">
-        <label class="block font-medium mb-1">Author</label>
-        <input formControlName="author" type="text" class="input-bordered" />
+        <label class="block font-medium mb-1">Author*</label>
+        <input
+          placeholder="Enter book author"
+          formControlName="author"
+          type="text"
+          class="input-bordered"
+        />
         <div
           *ngIf="
             bookForm.get('author')?.touched && bookForm.get('author')?.invalid
@@ -177,15 +189,15 @@
       </div>
       <div class="mb-4">
         <label class="block font-medium mb-1">Genre</label>
-        <select formControlName="genre" class="input-bordered">
+        <select formControlName="genreId" class="input-bordered">
           <option value="">Select Genre</option>
-          <option *ngFor="let genre of genres" [value]="genre">
-            {{ genre }}
+          <option *ngFor="let genre of genres" [value]="genre.genreId">
+            {{ genre.name }}
           </option>
         </select>
         <div
           *ngIf="
-            bookForm.get('genre')?.touched && bookForm.get('genre')?.invalid
+            bookForm.get('genreId')?.touched && bookForm.get('genreId')?.invalid
           "
           class="text-danger text-sm"
         >
@@ -194,7 +206,7 @@
       </div>
 
       <div class="mb-4">
-        <label class="block font-medium mb-1">Total Copies</label>
+        <label class="block font-medium mb-1">Total Copies*</label>
         <input
           formControlName="totalCopies"
           type="number"
