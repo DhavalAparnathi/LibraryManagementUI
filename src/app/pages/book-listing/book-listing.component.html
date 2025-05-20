@@ -23,6 +23,17 @@
     />
 
     <select
+      [(ngModel)]="filters.genre"
+      (change)="onFilterChange()"
+      class="input-bordered me-2"
+    >
+      <option value="">All Genres</option>
+      <option *ngFor="let genre of genres" [value]="genre">
+        {{ genre }}
+      </option>
+    </select>
+
+    <select
       [(ngModel)]="sortColumn"
       (change)="onSortChange()"
       class="input-bordered me-2"
@@ -166,7 +177,12 @@
       </div>
       <div class="mb-4">
         <label class="block font-medium mb-1">Genre</label>
-        <input formControlName="genre" type="text" class="input-bordered" />
+        <select formControlName="genre" class="input-bordered">
+          <option value="">Select Genre</option>
+          <option *ngFor="let genre of genres" [value]="genre">
+            {{ genre }}
+          </option>
+        </select>
         <div
           *ngIf="
             bookForm.get('genre')?.touched && bookForm.get('genre')?.invalid

@@ -45,10 +45,10 @@ export class UserService {
   }
 
   deleteUser(userId: number) {
-    return this.http.delete(`${this.baseUrl}/users/${userId}`);
+    return this.http.delete(`${this.baseUrl}/${ApiEndpoints.USERS}/${userId}`);
   }
 
   upsertUser(user: any) {
-    return this.http.post(`${this.baseUrl}/users/upsert`, user);
+    return this.http.post(`${this.baseUrl}/${ApiEndpoints.UPSERT_USER}`, user);
   }
 }

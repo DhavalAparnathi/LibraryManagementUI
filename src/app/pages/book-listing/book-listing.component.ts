@@ -23,6 +23,7 @@ import { ToastService } from '../../services/toast.service';
 })
 export class BookListingComponent implements OnInit {
   books: any[] = [];
+  genres: any[] = [];
   loading = false;
   error = '';
   isAdmin = false;
@@ -30,7 +31,7 @@ export class BookListingComponent implements OnInit {
   bookForm: FormGroup;
   selectedBook: any = null;
 
-  filters = { name: '', author: '' };
+  filters = { name: '', author: '', genre: '' };
   sortColumn = 'Name';
   sortDirection = 'ASC';
   pageNumber = 1;
@@ -63,6 +64,7 @@ export class BookListingComponent implements OnInit {
       this.isAdmin = decoded?.role === 'Admin';
     }
     this.fetchBooks();
+    this.fetchBookGenres();
   }
 
   openModal(book?: any) {
@@ -112,6 +114,17 @@ export class BookListingComponent implements OnInit {
       error: () => {
         this.error = 'Failed to load books';
         this.loading = false;
+      },
+    });
+  }
+
+  fetchBookGenres() {
+    this._bookService.getBookGenres().subscribe({
+      next: (response) => {
+        this.genres = response.data;
+      },
+      error: (err) => {
+        console.error('Error fetching genres:', err);
       },
     });
   }

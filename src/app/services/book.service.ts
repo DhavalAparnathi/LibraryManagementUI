@@ -48,4 +48,10 @@ export class BookService {
   upsertBook(book: any) {
     return this.http.post(`${this.baseUrl}/${ApiEndpoints.UPSERT_BOOK}`, book);
   }
+
+  getBookGenres(): Observable<ApiResponse<string[]>> {
+    return this.http.get<ApiResponse<string[]>>(
+      `${this.baseUrl}/${ApiEndpoints.BOOK_LIST_GENRES}`
+    );
+  }
 }
