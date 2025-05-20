@@ -1,0 +1,217 @@
+<div class="book-list-container">
+  <div class="d-flex justify-content-between">
+    <h2 class="text-xl font-bold mb-4">Book List</h2>
+    <button *ngIf="isAdmin" class="btn btn-success mb-4" (click)="openModal()">
+      Add Book
+    </button>
+  </div>
+
+  <div class="d-flex justify-content-between mb-3">
+    <input
+      type="text"
+      placeholder="Search by book name"
+      [(ngModel)]="filters.name"
+      (input)="onFilterChange()"
+      class="input-bordered me-2"
+    />
+    <input
+      type="text"
+      placeholder="Search by author"
+      [(ngModel)]="filters.author"
+      (input)="onFilterChange()"
+      class="input-bordered me-2"
+    />
+
+    <select
+      [(ngModel)]="sortColumn"
+      (change)="onSortChange()"
+      class="input-bordered me-2"
+    >
+      <option value="Name">Sort by Name</option>
+      <option value="Author">Sort by Author</option>
+    </select>
+
+    <select
+      [(ngModel)]="sortDirection"
+      (change)="onSortChange()"
+      class="input-bordered"
+    >
+      <option value="ASC">Asc</option>
+      <option value="DESC">Desc</option>
+    </select>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <span class="text-black">Total Books: {{ totalCount }}</span>
+  </div>
+
+  <table class="w-full border-collapse">
+    <thead>
+      <tr class="bg-gray-200">
+        <th>Sr No</th>
+        <th>Book Name</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th class="thNumber">Total Copies</th>
+        <th class="thNumber">Available Copies</th>
+        <th *ngIf="isAdmin">Actions</th>
+        <th *ngIf="!isAdmin">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books; let i = index" class="border-b">
+        <td>{{ i + 1 }}</td>
+        <td>{{ book.name }}</td>
+        <td>{{ book.author }}</td>
+        <td [ngClass]="{ tdNumber: !book.genre }">{{ book.genre || "-" }}</td>
+        <td class="tdNumber">{{ book.totalCopies }}</td>
+        <td class="tdNumber">{{ book.availableCopies }}</td>
+        <td *ngIf="isAdmin">
+          <button
+            (click)="openModal(book)"
+            class="btn btn-sm btn-info cursor-pointer me-2"
+          >
+            Edit
+          </button>
+
+          <button
+            (click)="deleteBook(book.id)"
+            class="btn btn-sm btn-danger cursor-pointer"
+          >
+            Delete
+          </button>
+        </td>
+        <td *ngIf="!isAdmin">
+          <button
+            class="btn btn-sm btn-primary cursor-pointer me-2"
+            (click)="issueBook(book.id)"
+            [disabled]="book.availableCopies === 0"
+            *ngIf="!book.hasIssued && book.availableCopies > 0"
+          >
+            Issue
+          </button>
+          <button
+            class="btn btn-sm btn-warning cursor-pointer"
+            (click)="returnBook(book.issueId)"
+            *ngIf="book.hasIssued"
+          >
+            Return
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-end mt-3 align-items-center">
+    <button
+      class="btn btn-sm btn-secondary me-2"
+      (click)="prevPage()"
+      [disabled]="pageNumber === 1"
+    >
+      Previous
+    </button>
+    <span>Page {{ pageNumber }} of {{ totalPages }}</span>
+    <button
+      class="btn btn-sm btn-secondary ms-2"
+      (click)="nextPage()"
+      [disabled]="pageNumber === totalPages"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
+<div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <h2 class="text-xl font-bold mb-4">
+      {{ selectedBook?.id ? "Edit Book" : "Add Book" }}
+    </h2>
+    <form [formGroup]="bookForm" (ngSubmit)="submitBookForm()">
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Name</label>
+        <input formControlName="name" type="text" class="input-bordered" />
+        <div
+          *ngIf="bookForm.get('name')?.touched && bookForm.get('name')?.invalid"
+          class="text-danger text-sm"
+        >
+          Name is required.
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Author</label>
+        <input formControlName="author" type="text" class="input-bordered" />
+        <div
+          *ngIf="
+            bookForm.get('author')?.touched && bookForm.get('author')?.invalid
+          "
+          class="text-danger text-sm"
+        >
+          Author is required.
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Genre</label>
+        <input formControlName="genre" type="text" class="input-bordered" />
+        <div
+          *ngIf="
+            bookForm.get('genre')?.touched && bookForm.get('genre')?.invalid
+          "
+          class="text-danger text-sm"
+        >
+          Genre is required.
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Total Copies</label>
+        <input
+          formControlName="totalCopies"
+          type="number"
+          class="input-bordered"
+        />
+        <div
+          *ngIf="
+            bookForm.get('totalCopies')?.touched &&
+            bookForm.get('totalCopies')?.invalid
+          "
+          class="text-danger text-sm"
+        >
+          Total Copies is required and must be at least 1.
+        </div>
+      </div>
+      <div class="mb-4" *ngIf="selectedBook">
+        <label class="block font-medium mb-1">Available Copies</label>
+        <input
+          formControlName="availableCopies"
+          type="number"
+          class="input-bordered"
+        />
+        <div
+          *ngIf="
+    (bookForm.get('availableCopies')?.touched &&
+      bookForm.get('availableCopies')?.invalid) ||
+    (bookForm.errors?.['availableExceedsTotal'] &&
+      bookForm.get('availableCopies')?.touched)
+  "
+          class="text-danger text-sm"
+        >
+          <span *ngIf="bookForm.get('availableCopies')?.hasError('required')">
+            Available copies is required.
+          </span>
+          <span *ngIf="bookForm.get('availableCopies')?.hasError('min')">
+            Available copies must be at least 0.
+          </span>
+          <span *ngIf="bookForm.errors?.['availableExceedsTotal']">
+            Available copies cannot exceed total copies.
+          </span>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" (click)="closeModal()" class="btn btn-secondary">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

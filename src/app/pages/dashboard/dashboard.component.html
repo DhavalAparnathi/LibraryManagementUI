@@ -1,0 +1,25 @@
+<nav class="navbar">
+  <div class="d-flex gap-4 ms-2">
+    <span
+      class="active-link text-light cursor-pointer"
+      (click)="navigateToBooks()"
+    >
+      Book List
+    </span>
+    <span
+      *ngIf="isAdmin"
+      class="active-link text-light cursor-pointer"
+      (click)="navigateToUsers()"
+    >
+      User List
+    </span>
+  </div>
+  <div class="d-flex align-items-center gap-3">
+    <span class="text-light">Current Role: {{ userRole }} </span>
+    <button (click)="onLogout()" class="btn btn-danger">Logout</button>
+  </div>
+</nav>
+
+<div class="dashboard-content">
+  <router-outlet></router-outlet>
+</div>

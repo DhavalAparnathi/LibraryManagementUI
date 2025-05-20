@@ -1,0 +1,213 @@
+<div class="user-list-container">
+  <div class="d-flex justify-content-between">
+    <h2 class="text-xl font-bold mb-4">User List</h2>
+    <button *ngIf="isAdmin" class="btn btn-success mb-4" (click)="openModal()">
+      Add User
+    </button>
+  </div>
+
+  <div class="d-flex justify-content-between mb-3">
+    <input
+      type="text"
+      placeholder="Search by user name"
+      [(ngModel)]="filters.userName"
+      (input)="onFilterChange()"
+      class="input-bordered me-2"
+    />
+    <input
+      type="text"
+      placeholder="Search by email"
+      [(ngModel)]="filters.email"
+      (input)="onFilterChange()"
+      class="input-bordered me-2"
+    />
+
+    <select
+      [(ngModel)]="sortColumn"
+      (change)="onSortChange()"
+      class="input-bordered me-2"
+    >
+      <option value="UserName">Sort by User Name</option>
+      <option value="Email">Sort by Email</option>
+    </select>
+
+    <select
+      [(ngModel)]="sortDirection"
+      (change)="onSortChange()"
+      class="input-bordered"
+    >
+      <option value="ASC">Asc</option>
+      <option value="DESC">Desc</option>
+    </select>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <span class="text-black">Total Books: {{ totalCount }}</span>
+  </div>
+
+  <table class="w-full border-collapse">
+    <thead>
+      <tr class="bg-gray-200">
+        <th>Sr No</th>
+        <th>User Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th *ngIf="isAdmin">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users; let i = index" class="border-b">
+        <td>{{ i + 1 }}</td>
+        <td>{{ user.userName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phoneNumber || "-" }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+          <span
+            [class.text-green-600]="user.isActive"
+            [class.text-red-600]="!user.isActive"
+          >
+            {{ user.isActive ? "Active" : "Inactive" }}
+          </span>
+        </td>
+        <td *ngIf="isAdmin">
+          <button
+            (click)="openModal(user)"
+            class="btn btn-sm btn-info cursor-pointer me-2"
+          >
+            Edit
+          </button>
+
+          <button
+            (click)="deleteUser(user.id)"
+            class="btn btn-sm btn-danger cursor-pointer"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-end mt-3 align-items-center">
+    <button
+      class="btn btn-sm btn-secondary me-2"
+      (click)="prevPage()"
+      [disabled]="pageNumber === 1"
+    >
+      Previous
+    </button>
+    <span>Page {{ pageNumber }} of {{ totalPages }}</span>
+    <button
+      class="btn btn-sm btn-secondary ms-2"
+      (click)="nextPage()"
+      [disabled]="pageNumber === totalPages"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
+<div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <h2 class="text-xl font-bold mb-4">
+      {{ selectedUser?.id ? "Edit User" : "Add User" }}
+    </h2>
+    <form [formGroup]="userForm" (ngSubmit)="submitUserForm()">
+      <div class="mb-4">
+        <label class="block font-medium mb-1">User Name</label>
+        <input formControlName="userName" type="text" class="input-bordered" />
+        <div
+          *ngIf="
+            userForm.get('userName')?.touched &&
+            userForm.get('userName')?.invalid
+          "
+          class="text-red-600 text-sm"
+        >
+          User Name is required
+        </div>
+      </div>
+
+      <div class="mb-4" *ngIf="!selectedUser?.id">
+        <label class="block font-medium mb-1">
+          Password
+          <span></span>
+        </label>
+        <input
+          formControlName="passwordHash"
+          [type]="passwordVisible ? 'text' : 'password'"
+          class="input-bordered"
+        />
+        <button
+          type="button"
+          class="absolute right-2 top-9 text-gray-600"
+          (click)="togglePasswordVisibility()"
+          aria-label="Toggle password visibility"
+        >
+          {{ passwordVisible ? "Hide" : "Show" }}
+        </button>
+        <div
+          *ngIf="
+            userForm.get('passwordHash')?.touched &&
+            userForm.get('passwordHash')?.invalid
+          "
+          class="text-red-600 text-sm"
+        >
+          Password is required when adding a new user
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Email</label>
+        <input formControlName="email" type="email" class="input-bordered" />
+        <div
+          *ngIf="
+            userForm.get('email')?.touched && userForm.get('email')?.invalid
+          "
+          class="text-red-600 text-sm"
+        >
+          Enter a valid email
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Phone Number</label>
+        <input
+          formControlName="phoneNumber"
+          type="text"
+          class="input-bordered"
+        />
+        <div
+          *ngIf="
+            userForm.get('phoneNumber')?.touched &&
+            userForm.get('phoneNumber')?.invalid
+          "
+          class="text-red-600 text-sm"
+        >
+          <div *ngIf="userForm.get('phoneNumber')?.errors?.['required']">
+            Phone Number is required
+          </div>
+          <div *ngIf="userForm.get('phoneNumber')?.errors?.['pattern']">
+            Enter a valid 10-digit phone number
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="inline-flex items-center gap-2 cursor-pointer">
+          <input formControlName="isActive" type="checkbox" />
+          <span>Status Active</span>
+        </label>
+      </div>
+
+      <div class="d-flex justify-end gap-2">
+        <button type="button" (click)="closeModal()" class="btn btn-secondary">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
