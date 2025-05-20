@@ -81,6 +81,8 @@ export class BookListingComponent implements OnInit {
       });
     }
 
+    this.bookForm.setValidators(this.validateAvailableCopies());
+    this.bookForm.updateValueAndValidity();
     this.showModal = true;
   }
 
@@ -189,14 +191,30 @@ export class BookListingComponent implements OnInit {
 
   validateAvailableCopies(): ValidatorFn {
     return (form: AbstractControl): ValidationErrors | null => {
-      const total = form.get('totalCopies')?.value;
-      const available = form.get('availableCopies')?.value;
+      const total = form.get('totalCopies')?.value ?? 0;
+      const available = form.get('availableCopies')?.value ?? 0;
+      const issuedUserCount = this.selectedBook?.issuedUserCount ?? 0;
 
-      if (available > total) {
-        return { availableExceedsTotal: true };
+      const errors: ValidationErrors = {};
+
+      if (total < issuedUserCount) {
+        errors['totalLessThanIssued'] = true;
       }
 
-      return null;
+      if (available > total) {
+        errors['availableExceedsTotal'] = true;
+      }
+
+      const expectedAvailable = total - issuedUserCount;
+      if (available !== expectedAvailable) {
+        errors['invalidAvailableCount'] = {
+          expected: expectedAvailable,
+          actual: available,
+        };
+      }
+      console.log('expectedAvailable', expectedAvailable);
+
+      return Object.keys(errors).length ? errors : null;
     };
   }
 

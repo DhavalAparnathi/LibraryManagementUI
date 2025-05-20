@@ -61,7 +61,22 @@
     <tbody>
       <tr *ngFor="let book of books; let i = index" class="border-b">
         <td>{{ i + 1 }}</td>
-        <td>{{ book.name }}</td>
+        <td>
+          {{ book.name }}
+          <span
+            *ngIf="book.issuedUserCount && book.issuedUserCount > 0"
+            [title]="
+              'Occupied by ' +
+              book.issuedUserCount +
+              ' user' +
+              (book.issuedUserCount > 1 ? 's' : '')
+            "
+            [ngClass]="{ 'cursor-default': book.issuedUserCount > 1 }"
+          >
+            ({{ book.issuedUserCount }})
+          </span>
+        </td>
+
         <td>{{ book.author }}</td>
         <td [ngClass]="{ tdNumber: !book.genre }">{{ book.genre || "-" }}</td>
         <td class="tdNumber">{{ book.totalCopies }}</td>
@@ -172,14 +187,24 @@
         <div
           *ngIf="
             bookForm.get('totalCopies')?.touched &&
-            bookForm.get('totalCopies')?.invalid
+            (bookForm.get('totalCopies')?.invalid || bookForm.errors?.['totalLessThanIssued'])
           "
           class="text-danger text-sm"
         >
-          Total Copies is required and must be at least 1.
+          <span *ngIf="bookForm.get('totalCopies')?.hasError('required')">
+            Total Copies is required.
+          </span>
+          <span *ngIf="bookForm.get('totalCopies')?.hasError('min')">
+            Total Copies must be at least 1.
+          </span>
+          <span *ngIf="bookForm.errors?.['totalLessThanIssued']">
+            Total Copies cannot be less than number of users who have issued the
+            book ({{ selectedBook?.issuedUserCount }}).
+          </span>
         </div>
       </div>
-      <div class="mb-4" *ngIf="selectedBook">
+
+      <div class="mb-4">
         <label class="block font-medium mb-1">Available Copies</label>
         <input
           formControlName="availableCopies"
@@ -188,24 +213,33 @@
         />
         <div
           *ngIf="
-    (bookForm.get('availableCopies')?.touched &&
-      bookForm.get('availableCopies')?.invalid) ||
-    (bookForm.errors?.['availableExceedsTotal'] &&
-      bookForm.get('availableCopies')?.touched)
-  "
+            bookForm.get('availableCopies')?.touched &&
+            (bookForm.get('availableCopies')?.invalid || bookForm.errors?.['availableExceedsTotal'] || bookForm.errors?.['invalidAvailableCount'])
+          "
           class="text-danger text-sm"
         >
           <span *ngIf="bookForm.get('availableCopies')?.hasError('required')">
-            Available copies is required.
+            Available Copies is required.
           </span>
           <span *ngIf="bookForm.get('availableCopies')?.hasError('min')">
-            Available copies must be at least 0.
+            Available Copies cannot be negative.
           </span>
           <span *ngIf="bookForm.errors?.['availableExceedsTotal']">
-            Available copies cannot exceed total copies.
+            Available Copies cannot exceed Total Copies.
+          </span>
+          <span *ngIf="bookForm.errors?.['invalidAvailableCount']">
+            Available Copies must be exactly ({{
+              bookForm.get("totalCopies")?.value
+            }}
+            total - {{ selectedBook?.issuedUserCount ?? 0 }} issued =
+            {{
+              (bookForm.get("totalCopies")?.value || 0) -
+                (selectedBook?.issuedUserCount ?? 0)
+            }}).
           </span>
         </div>
       </div>
+
       <div class="d-flex justify-content-end gap-2">
         <button type="button" (click)="closeModal()" class="btn btn-secondary">
           Cancel
