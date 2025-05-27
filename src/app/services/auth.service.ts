@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment';
-import { ApiEndpoints } from '../utils/constants/api-endpoints';
+import { environment } from '../../environments';
+import { ApiEndpoints } from '../utils';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -20,11 +20,15 @@ export class AuthService {
     password: string;
     phoneNumber: string;
   }) {
-    return this.http.post(`${this.baseUrl}/${ApiEndpoints.REGISTER}`, data);
+    // return this.http.post(`${this.baseUrl}/${ApiEndpoints.REGISTER}`, data);
   }
 
   logout() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
+  }
+
+  reset(credentials: { oldPassword: string; newPassword: string }) {
+    return this.http.post(`${this.baseUrl}/${ApiEndpoints.RESET}`, credentials);
   }
 }

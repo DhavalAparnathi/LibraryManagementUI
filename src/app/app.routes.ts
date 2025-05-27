@@ -1,9 +1,14 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
-import { BookListingComponent } from './pages/book-listing/book-listing.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { UserListingComponent } from './pages/user-listing/user-listing.component';
-import { UserLoginComponent } from './pages/user-login/user-login.component';
+import {
+  BookListingComponent,
+  DashboardComponent,
+  DepartmentListingComponent,
+  HomeComponent,
+  SubjectsListingComponent,
+  UserListingComponent,
+  UserLoginComponent,
+} from './pages';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,8 +16,15 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () =>
-      import('./pages/user-registration/user-registration.component').then(
+      import('./pages/auth/user-registration/user-registration.component').then(
         (m) => m.UserRegistrationComponent
+      ),
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./pages/auth/reset-password/reset-password.component').then(
+        (m) => m.ResetPasswordComponent
       ),
   },
   {
@@ -30,7 +42,22 @@ export const routes: Routes = [
         component: BookListingComponent,
         canActivate: [AuthGuard],
       },
-      { path: '', redirectTo: 'books', pathMatch: 'full' },
+      {
+        path: 'departments',
+        component: DepartmentListingComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'subjects',
+        component: SubjectsListingComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'home',
+        component: HomeComponent,
+        canActivate: [AuthGuard],
+      },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },
   { path: '**', redirectTo: 'login' },

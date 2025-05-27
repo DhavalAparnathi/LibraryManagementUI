@@ -1,0 +1,69 @@
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100"
+>
+  <div
+    class="login-box p-4 shadow-lg rounded bg-white w-100"
+    style="max-width: 400px"
+  >
+    <h2 class="text-center mb-4 fs-2">User Login</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Enter email"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              loginForm.get('email')?.touched && loginForm.get('email')?.invalid
+          }"
+        />
+        <div class="invalid-feedback">Please enter a valid email.</div>
+      </div>
+
+      <div class="mb-3 position-relative">
+        <label class="form-label">Password</label>
+        <input
+          [type]="passwordVisible ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Enter password"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              loginForm.get('password')?.touched &&
+              loginForm.get('password')?.invalid
+          }"
+        />
+        <button
+          type="button"
+          class="btn btn-sm btn-link position-absolute top-50 end-0 translate-middle-y me-2 mt-3"
+          (click)="togglePasswordVisibility()"
+          tabindex="-1"
+        >
+          {{ passwordVisible ? "Hide" : "Show" }}
+        </button>
+        <div class="invalid-feedback">Password is required.</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+
+    <!-- <p class="text-center mt-3 mb-0">
+      Don’t have an account?
+      <span class="text-primary register-link" (click)="navigateToRegister()"
+        >Register here</span
+      >
+    </p> -->
+
+    <p class="text-center mt-3 mb-0">
+      Forgot password?
+      <span
+        class="text-primary register-link"
+        (click)="navigateToForgotPassword()"
+        >Click here</span
+      >
+    </p>
+  </div>
+</div>

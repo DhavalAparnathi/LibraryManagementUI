@@ -7,8 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { ToastService } from '../../services/toast.service';
+import { AuthService, ToastService } from '../../../services';
 
 @Component({
   selector: 'app-user-login',
@@ -60,7 +59,11 @@ export class UserLoginComponent {
     }
   }
 
-  navigateToRegister() {
-    this._router.navigate(['/register']);
+  // navigateToRegister() {
+  //   this._router.navigate(['/register']);
+  // }
+
+  navigateToForgotPassword() {
+    this._router.navigate(['/reset-password']);
   }
 }

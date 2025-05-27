@@ -1,5 +1,5 @@
 .navbar {
-  background: #4f46e5;
+  background: #179bd7;
   padding: 10px;
   display: flex;
   gap: 20px;
@@ -18,4 +18,15 @@
 
 .dashboard-content {
   padding: 20px;
+}
+
+.text-college {
+  color: #253b80;
+  cursor: pointer;
+}
+
+.dashboard-content {
+  app-home {
+    padding: 0 !important;
+  }
 }

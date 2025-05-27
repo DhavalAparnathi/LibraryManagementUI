@@ -1,0 +1,169 @@
+<div class="department-list-container">
+  <div class="d-flex justify-content-between">
+    <h2 class="text-xl font-bold mb-4">Department List</h2>
+    <button *ngIf="isAdmin" class="btn btn-success mb-4" (click)="openModal()">
+      Add Department
+    </button>
+  </div>
+
+  <div class="d-flex justify-content-between mb-3">
+    <input
+      type="text"
+      placeholder="Search by user name"
+      [(ngModel)]="filters.departmentName"
+      (input)="onFilterChange()"
+      class="input-bordered me-2"
+    />
+
+    <select
+      [(ngModel)]="sortColumn"
+      (change)="onSortChange()"
+      class="input-bordered me-2"
+    >
+      <option value="DepartmentName">Sort by Department Name</option>
+    </select>
+
+    <select
+      [(ngModel)]="sortDirection"
+      (change)="onSortChange()"
+      class="input-bordered"
+    >
+      <option value="ASC">Asc</option>
+      <option value="DESC">Desc</option>
+    </select>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <span class="text-black">Total Department: {{ totalCount }}</span>
+  </div>
+
+  <table class="w-full border-collapse">
+    <thead>
+      <tr class="bg-gray-200">
+        <th>Sr No</th>
+        <th>Department Name</th>
+        <th>Description</th>
+        <!-- <th>HOD ID</th> -->
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let department of departments; let i = index"
+        class="border-b"
+      >
+        <td>{{ i + 1 }}</td>
+        <td>{{ department.departmentName }}</td>
+        <td>{{ department.description }}</td>
+        <!-- <td>{{ department.hodUserId }}</td> -->
+        <td>
+          <button
+            class="btn btn-sm btn-info cursor-pointer me-2"
+            (click)="openModal(department)"
+          >
+            Edit
+          </button>
+
+          <button
+            (click)="deleteDepartment(department.departmentId)"
+            class="btn btn-sm btn-danger cursor-pointer"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-end mt-3 align-items-center">
+    <button
+      class="btn btn-sm btn-secondary me-2"
+      (click)="prevPage()"
+      [disabled]="pageNumber === 1"
+    >
+      Previous
+    </button>
+    <span>Page {{ pageNumber }} of {{ totalPages }}</span>
+    <button
+      class="btn btn-sm btn-secondary ms-2"
+      (click)="nextPage()"
+      [disabled]="pageNumber === totalPages"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
+<div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <h2 class="text-xl font-bold mb-4">
+      {{
+        selectedDepartment?.departmentId ? "Edit Department" : "Add Department"
+      }}
+    </h2>
+    <form [formGroup]="departmentForm" (ngSubmit)="submitDepartmentForm()">
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Department Name*</label>
+        <input
+          placeholder="Enter department name"
+          formControlName="departmentName"
+          type="text"
+          class="input-bordered"
+        />
+        <div
+          *ngIf="
+            departmentForm.get('departmentName')?.touched &&
+            departmentForm.get('departmentName')?.invalid
+          "
+          class="text-red-600 text-sm"
+        >
+          Department Name is required
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Description*</label>
+        <input
+          placeholder="Enter description"
+          formControlName="description"
+          type="text"
+          class="input-bordered"
+        />
+        <div
+          *ngIf="
+            departmentForm.get('description')?.touched &&
+            departmentForm.get('description')?.invalid
+          "
+          class="text-red-600 text-sm"
+        >
+          Enter a valid description
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-medium mb-1">HOD</label>
+        <select formControlName="hodUserId" class="input-bordered">
+          <option value="">Select HOD</option>
+          <option *ngFor="let hod of users" [value]="hod.hodUserId">
+            {{ hod.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            departmentForm.get('hodUserId')?.touched &&
+            departmentForm.get('hodUserId')?.invalid
+          "
+          class="text-danger text-sm"
+        >
+          HOD is required.
+        </div>
+      </div>
+
+      <div class="d-flex justify-end gap-2">
+        <button type="button" (click)="closeModal()" class="btn btn-secondary">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

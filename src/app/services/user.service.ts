@@ -1,24 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { ApiEndpoints } from '../utils/constants/api-endpoints';
-
-interface ApiResponse<T> {
-  isSuccessfull: boolean;
-  statusCode: number;
-  message: string;
-  data: T;
-}
-
-interface UserListData {
-  items: User[];
-  pageNumber: number;
-  pageSize: number;
-  totalCount: number;
-  sortColumn: string;
-  sortDirection: string;
-}
+import { environment } from '../../environments';
+import { ApiResponse, PaginatedListData } from '../models';
+import { ApiEndpoints } from '../utils';
 
 export interface User {
   id: number;
@@ -37,8 +22,8 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(requestBody: any): Observable<ApiResponse<UserListData>> {
-    return this.http.post<ApiResponse<UserListData>>(
+  getUsers(requestBody: any): Observable<ApiResponse<PaginatedListData>> {
+    return this.http.post<ApiResponse<PaginatedListData>>(
       `${this.baseUrl}/${ApiEndpoints.USER_LIST}`,
       requestBody
     );

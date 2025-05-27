@@ -1,0 +1,132 @@
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100"
+>
+  <div
+    class="register-box p-4 shadow-lg rounded bg-white w-100"
+    style="max-width: 400px"
+  >
+    <h2 class="text-center mb-4">Register</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="mb-3">
+        <label class="form-label">User Name</label>
+        <input
+          type="text"
+          placeholder="Enter user name"
+          formControlName="userName"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              registerForm.get('userName')?.touched &&
+              registerForm.get('userName')?.invalid
+          }"
+        />
+        <div class="invalid-feedback">User Name is required.</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          placeholder="Enter email"
+          formControlName="email"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              registerForm.get('email')?.touched &&
+              registerForm.get('email')?.invalid
+          }"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="registerForm.get('email')?.errors?.['required']"
+        >
+          Email is required.
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="registerForm.get('email')?.errors?.['email']"
+        >
+          Enter a valid email.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Phone Number</label>
+        <input
+          type="text"
+          placeholder="Enter phone number"
+          formControlName="phoneNumber"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              registerForm.get('phoneNumber')?.touched &&
+              registerForm.get('phoneNumber')?.invalid
+          }"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="registerForm.get('phoneNumber')?.errors?.['required']"
+        >
+          Phone Number is required.
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="registerForm.get('phoneNumber')?.errors?.['pattern']"
+        >
+          Enter a valid 10-digit phone number.
+        </div>
+      </div>
+
+      <div class="mb-3 position-relative">
+        <label class="form-label">Password</label>
+        <input
+          [type]="passwordVisible ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Enter password"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              registerForm.get('password')?.touched &&
+              registerForm.get('password')?.invalid
+          }"
+        />
+        <button
+          type="button"
+          class="btn btn-sm btn-link position-absolute top-50 end-0 translate-middle-y me-2 mt-3"
+          (click)="togglePasswordVisibility('password')"
+          tabindex="-1"
+        >
+          {{ passwordVisible ? "Hide" : "Show" }}
+        </button>
+        <div class="invalid-feedback">Password is required.</div>
+      </div>
+
+      <div class="mb-3 position-relative">
+        <label class="form-label">Confirm Password</label>
+        <input
+          [type]="confirmPasswordVisible ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          placeholder="Confirm your password"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              registerForm.get('confirmPassword')?.touched &&
+              registerForm.get('confirmPassword')?.invalid
+          }"
+        />
+        <button
+          type="button"
+          class="btn btn-sm btn-link position-absolute top-50 end-0 translate-middle-y me-2 mt-3"
+          (click)="togglePasswordVisibility('confirmPassword')"
+          tabindex="-1"
+        >
+          {{ confirmPasswordVisible ? "Hide" : "Show" }}
+        </button>
+        <div class="invalid-feedback">Confirm Password is required.</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+    </form>
+  </div>
+</div>

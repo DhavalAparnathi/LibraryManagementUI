@@ -63,7 +63,7 @@
         <td>{{ user.userName }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.phoneNumber || "-" }}</td>
-        <td>{{ user.role }}</td>
+        <td>{{ getRoleKey(user.roleId) }}</td>
         <td>
           <span
             [class.text-green-600]="user.isActive"

@@ -1,8 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common';
-import { ToastService } from '../../services/toast.service';
+import { AuthService, ToastService } from '../../services';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +12,7 @@ import { ToastService } from '../../services/toast.service';
 })
 export class DashboardComponent {
   isAdmin = false;
-  userRole: string = '';
+  currentRole: string = '';
 
   constructor(
     private _authService: AuthService,
@@ -25,8 +24,8 @@ export class DashboardComponent {
     const token = localStorage.getItem('token');
     if (token) {
       const decoded = JSON.parse(atob(token.split('.')[1]));
-      this.userRole = decoded?.role || 'User';
-      this.isAdmin = this.userRole === 'Admin';
+      this.currentRole = decoded?.role || 'Student';
+      this.isAdmin = this.currentRole === 'Admin';
     }
   }
 
@@ -45,5 +44,17 @@ export class DashboardComponent {
 
   navigateToIssuing() {
     this._router.navigate(['/dashboard/issued-books']);
+  }
+
+  navigateToDashboard() {
+    this._router.navigate(['/dashboard']);
+  }
+
+  navigateToDepartments() {
+    this._router.navigate(['/dashboard/departments']);
+  }
+
+  navigateToSubjects() {
+    this._router.navigate(['/dashboard/subjects']);
   }
 }

@@ -7,8 +7,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ToastService } from '../../services/toast.service';
-import { UserService } from '../../services/user.service';
+import { ToastService, UserService } from '../../services';
+import { getRoleKey } from '../../utils';
 
 @Component({
   selector: 'app-user-listing',
@@ -32,6 +32,7 @@ export class UserListingComponent {
   pageSize = 5;
   totalPages = 1;
   totalCount = 0;
+  getRoleKey = getRoleKey;
 
   passwordVisible = false;
 

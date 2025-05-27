@@ -1,16 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { ApiEndpoints } from '../utils/constants/api-endpoints';
-import { BookListData } from '../models/types.model';
-
-interface ApiResponse<T> {
-  isSuccessfull: boolean;
-  statusCode: number;
-  message: string;
-  data: T;
-}
+import { environment } from '../../environments';
+import { ApiResponse, PaginatedListData } from '../models';
+import { ApiEndpoints } from '../utils';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +13,8 @@ export class BookService {
 
   constructor(private http: HttpClient) {}
 
-  getBooks(requestBody: any): Observable<ApiResponse<BookListData>> {
-    return this.http.post<ApiResponse<BookListData>>(
+  getBooks(requestBody: any): Observable<ApiResponse<PaginatedListData>> {
+    return this.http.post<ApiResponse<PaginatedListData>>(
       `${this.baseUrl}/${ApiEndpoints.BOOK_LIST}`,
       requestBody
     );

@@ -11,8 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { BookService } from '../../services/book.service';
-import { ToastService } from '../../services/toast.service';
+import { BookService, ToastService } from '../../services';
 
 @Component({
   selector: 'app-book-listing',
@@ -160,28 +159,31 @@ export class BookListingComponent implements OnInit {
     const userId = decoded?.nameid;
 
     const payload = { bookId, userId };
-
-    this._bookService.issueBook(payload).subscribe({
-      next: () => {
-        this._toast.showSuccess('Book issued successfully');
-        this.fetchBooks();
-      },
-      error: () => {
-        this._toast.showError('Failed to issue book');
-      },
-    });
+    if (confirm('Are you sure you want to issue this book?')) {
+      this._bookService.issueBook(payload).subscribe({
+        next: () => {
+          this._toast.showSuccess('Book issued successfully');
+          this.fetchBooks();
+        },
+        error: () => {
+          this._toast.showError('Failed to issue book');
+        },
+      });
+    }
   }
 
   returnBook(issueId: number) {
-    this._bookService.returnBook({ issueId }).subscribe({
-      next: () => {
-        this._toast.showSuccess('Book returned successfully');
-        this.fetchBooks();
-      },
-      error: () => {
-        this._toast.showError('Failed to return book');
-      },
-    });
+    if (confirm('Are you sure you want to return this book?')) {
+      this._bookService.returnBook({ issueId }).subscribe({
+        next: () => {
+          this._toast.showSuccess('Book returned successfully');
+          this.fetchBooks();
+        },
+        error: () => {
+          this._toast.showError('Failed to return book');
+        },
+      });
+    }
   }
 
   submitBookForm() {

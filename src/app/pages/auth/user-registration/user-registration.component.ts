@@ -7,8 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { ToastService } from '../../services/toast.service';
+import { AuthService, ToastService } from '../../../services';
 
 @Component({
   selector: 'app-user-registration',
@@ -61,20 +60,20 @@ export class UserRegistrationComponent {
         phoneNumber: formData.phoneNumber,
       };
 
-      this._api.register(payload).subscribe({
-        next: (response: any) => {
-          if (response.isSuccessfull) {
-            this._toast.showSuccess('Registration successful');
-            this._router.navigate(['/login']);
-          } else {
-            this._toast.showError(response.message || 'Registration failed');
-          }
-        },
-        error: (err) => {
-          console.error('Registration failed', err);
-          this._toast.showError('Registration failed');
-        },
-      });
+      // this._api.register(payload).subscribe({
+      //   next: (response: any) => {
+      //     if (response.isSuccessfull) {
+      //       this._toast.showSuccess('Registration successful');
+      //       this._router.navigate(['/login']);
+      //     } else {
+      //       this._toast.showError(response.message || 'Registration failed');
+      //     }
+      //   },
+      //   error: (err) => {
+      //     console.error('Registration failed', err);
+      //     this._toast.showError('Registration failed');
+      //   },
+      // });
     } else {
       this.registerForm.markAllAsTouched();
     }

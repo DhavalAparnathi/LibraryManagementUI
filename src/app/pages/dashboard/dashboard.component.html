@@ -1,21 +1,35 @@
 <nav class="navbar">
   <div class="d-flex gap-4 ms-2">
-    <span
-      class="active-link text-light cursor-pointer"
-      (click)="navigateToBooks()"
-    >
+    <span class="active-link text-light" (click)="navigateToBooks()">
       Book List
     </span>
     <span
       *ngIf="isAdmin"
-      class="active-link text-light cursor-pointer"
+      class="active-link text-light"
       (click)="navigateToUsers()"
     >
       User List
     </span>
+    <span
+      *ngIf="isAdmin"
+      class="active-link text-light"
+      (click)="navigateToDepartments()"
+    >
+      Department List
+    </span>
+    <span
+      *ngIf="isAdmin"
+      class="active-link text-light"
+      (click)="navigateToSubjects()"
+    >
+      Subjects List
+    </span>
   </div>
+  <span class="text-college fs-3 fw-bold" (click)="navigateToDashboard()">
+    Tatvasoft College
+  </span>
   <div class="d-flex align-items-center gap-3">
-    <span class="text-light">Current Role: {{ userRole }} </span>
+    <span class="text-light">Current Role: {{ currentRole }} </span>
     <button (click)="onLogout()" class="btn btn-danger">Logout</button>
   </div>
 </nav>
