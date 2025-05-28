@@ -42,7 +42,7 @@ export class SubjectsListingComponent {
       subjectId: [0],
       subjectName: ['', Validators.required],
       year: ['', Validators.required],
-      departmentId: [0],
+      departmentId: ['', Validators.required],
     });
   }
 
@@ -53,6 +53,7 @@ export class SubjectsListingComponent {
       this.isAdmin = decoded?.role === 'Admin';
     }
     this.fetchAllSubjects();
+    this.fetchDepartments();
   }
 
   openModal(department?: any) {
@@ -70,7 +71,7 @@ export class SubjectsListingComponent {
         subjectId: 0,
         subjectName: '',
         year: '',
-        departmentId: 0,
+        departmentId: '',
       });
     }
     this.showModal = true;
@@ -146,6 +147,17 @@ export class SubjectsListingComponent {
     }
   }
 
+  fetchDepartments() {
+    this._departmentService.getAllDepartments().subscribe({
+      next: (response) => {
+        this.departments = response.data;
+      },
+      error: (err) => {
+        console.error('Error fetching departments:', err);
+      },
+    });
+  }
+
   submitSubjectForm() {
     if (this.subjectForm.invalid) {
       this.subjectForm.markAllAsTouched();
@@ -154,22 +166,22 @@ export class SubjectsListingComponent {
 
     const formValue = this.subjectForm.getRawValue();
 
-    if (!formValue.departmentId || formValue.departmentId === 0) {
-      delete formValue.departmentId;
+    if (!formValue.subjectId || formValue.subjectId === 0) {
+      delete formValue.subjectId;
     }
 
-    this._departmentService.upsertDepartment(formValue).subscribe({
+    this._departmentService.upsertSubject(formValue).subscribe({
       next: () => {
         this._toast.showSuccess(
-          formValue.departmentId
-            ? 'Department updated successfully'
-            : 'Department added successfully'
+          formValue.subjectId
+            ? 'Subject updated successfully'
+            : 'Subject added successfully'
         );
         this.closeModal();
         this.fetchAllSubjects();
       },
       error: () => {
-        this._toast.showError('Failed to save department');
+        this._toast.showError('Failed to save subject');
       },
     });
   }

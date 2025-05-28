@@ -59,7 +59,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let user of users; let i = index" class="border-b">
-        <td>{{ i + 1 }}</td>
+        <td>{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
         <td>{{ user.userName }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.phoneNumber || "-" }}</td>
@@ -112,11 +112,11 @@
 
 <div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
   <div class="modal-box" (click)="$event.stopPropagation()">
-    <h2 class="text-xl font-bold mb-4">
+    <h2 class="text-xl font-bold mb-2">
       {{ selectedUser?.id ? "Edit User" : "Add User" }}
     </h2>
     <form [formGroup]="userForm" (ngSubmit)="submitUserForm()">
-      <div class="mb-4">
+      <div class="mb-2">
         <label class="block font-medium mb-1">User Name*</label>
         <input
           placeholder="Enter user name"
@@ -135,7 +135,7 @@
         </div>
       </div>
 
-      <div class="mb-4" *ngIf="!selectedUser?.id">
+      <div class="mb-2" *ngIf="!selectedUser?.id">
         <label class="block font-medium mb-1">
           Password*
           <span></span>
@@ -165,7 +165,7 @@
         </div>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-2">
         <label class="block font-medium mb-1">Email*</label>
         <input
           placeholder="Enter email"
@@ -183,7 +183,7 @@
         </div>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-2">
         <label class="block font-medium mb-1">Phone Number*</label>
         <input
           placeholder="Enter phone number"
@@ -207,7 +207,47 @@
         </div>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-2">
+        <label class="block font-medium mb-1">User Role</label>
+        <select formControlName="roleId" class="input-bordered">
+          <option value="">Select Role</option>
+          <option *ngFor="let role of roles" [value]="role.roleId">
+            {{ role.roleName }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            userForm.get('roleId')?.touched && userForm.get('roleId')?.invalid
+          "
+          class="text-danger text-sm"
+        >
+          Role is required.
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label class="block font-medium mb-1">Department</label>
+        <select formControlName="departmentId" class="input-bordered">
+          <option value="">Select Department</option>
+          <option
+            *ngFor="let department of departments"
+            [value]="department.departmentId"
+          >
+            {{ department.departmentName }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            userForm.get('departmentId')?.touched &&
+            userForm.get('departmentId')?.invalid
+          "
+          class="text-danger text-sm"
+        >
+          Department is required.
+        </div>
+      </div>
+
+      <div class="mb-2">
         <label class="inline-flex items-center gap-2 cursor-pointer">
           <input formControlName="isActive" type="checkbox" />
           <span>Status Active</span>

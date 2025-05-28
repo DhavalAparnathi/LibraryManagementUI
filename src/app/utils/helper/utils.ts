@@ -14,3 +14,5 @@ export const getRoleKey = (value: number): string => {
       return AllRoleType.STUDENT;
   }
 };
+
+export const getFormatDate = () => {};

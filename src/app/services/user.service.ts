@@ -36,4 +36,10 @@ export class UserService {
   upsertUser(user: any) {
     return this.http.post(`${this.baseUrl}/${ApiEndpoints.UPSERT_USER}`, user);
   }
+
+  getAllUserRoles(): Observable<ApiResponse<string[]>> {
+    return this.http.get<ApiResponse<string[]>>(
+      `${this.baseUrl}/${ApiEndpoints.USER_GET_ALL_ROLES}`
+    );
+  }
 }

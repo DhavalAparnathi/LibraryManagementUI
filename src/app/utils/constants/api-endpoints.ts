@@ -13,12 +13,15 @@ export const ApiEndpoints = {
   USERS: 'users',
   UPSERT_USER: 'users/upsert',
   USER_LIST: 'users/list',
+  USER_GET_ALL_ROLES: 'users/get-all-roles',
 
   DEPARTMENTS: 'departments',
   DEPARTMENTS_LIST: 'departments/list',
+  DEPARTMENTS_GET_ALL: 'departments/get-all',
   UPSERT_DEPARTMENT: 'departments/upsert',
 
   SUBJECTS: 'subjects',
   // SUBJECT_LIST: 'subjects/list',
   SUBJECT_GET_ALL: 'subjects/get-all',
+  UPSERT_SUBJECT: 'subjects/upsert',
 };

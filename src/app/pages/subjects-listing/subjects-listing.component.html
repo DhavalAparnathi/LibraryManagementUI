@@ -49,7 +49,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let subject of subjects; let i = index" class="border-b">
-        <td>{{ i + 1 }}</td>
+        <td>{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
         <td>{{ subject.subjectName }}</td>
         <td>{{ subject.year }}</td>
         <td>{{ subject.departmentId }}</td>
@@ -111,7 +111,7 @@
           "
           class="text-red-600 text-sm"
         >
-          Subject Name is required
+          Subject Name is required.
         </div>
       </div>
 
@@ -129,7 +129,7 @@
           "
           class="text-red-600 text-sm"
         >
-          Enter a valid year
+          Year is required.
         </div>
       </div>
 
@@ -151,7 +151,7 @@
           "
           class="text-danger text-sm"
         >
-          HOD is required.
+          Department is required.
         </div>
       </div>
 

@@ -10,3 +10,26 @@
   visibility: inherit !important;
   z-index: 20 !important;
 }
+
+.home-content {
+  margin: 0 20px;
+}
+
+footer {
+  background-color: #212529;
+  color: #f8f9fa;
+}
+
+footer a {
+  text-decoration: underline;
+}
+
+footer a:hover {
+  color: #adb5bd;
+}
+
+footer h4 {
+  border-bottom: 2px solid #f8f9fa;
+  display: inline-block;
+  padding-bottom: 4px;
+}

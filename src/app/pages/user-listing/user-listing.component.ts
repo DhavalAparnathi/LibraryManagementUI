@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ToastService, UserService } from '../../services';
+import { DepartmentService, ToastService, UserService } from '../../services';
 import { getRoleKey } from '../../utils';
 
 @Component({
@@ -18,26 +18,28 @@ import { getRoleKey } from '../../utils';
   styleUrl: './user-listing.component.scss',
 })
 export class UserListingComponent {
-  users: any[] = [];
-  loading = false;
-  error = '';
-  isAdmin = false;
-  showModal = false;
   userForm: FormGroup;
+  users: any[] = [];
+  roles: any[] = [];
+  departments: any[] = [];
+  loading = false;
+  isAdmin = false;
+  passwordVisible = false;
+  showModal = false;
   selectedUser: any = null;
-  filters = { userName: '', email: '' };
+  error = '';
   sortColumn = 'UserName';
   sortDirection = 'ASC';
   pageNumber = 1;
   pageSize = 5;
   totalPages = 1;
   totalCount = 0;
+  filters = { userName: '', email: '' };
   getRoleKey = getRoleKey;
-
-  passwordVisible = false;
 
   constructor(
     private _userService: UserService,
+    private _departmentService: DepartmentService,
     private _toast: ToastService,
     private _fb: FormBuilder
   ) {
@@ -47,6 +49,8 @@ export class UserListingComponent {
       passwordHash: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      roleId: ['', Validators.required],
+      departmentId: ['', Validators.required],
       isActive: [true],
     });
   }
@@ -59,6 +63,8 @@ export class UserListingComponent {
     }
 
     this.fetchUsers();
+    this.fetchUserRoles();
+    this.fetchDepartments();
   }
 
   togglePasswordVisibility() {
@@ -76,6 +82,8 @@ export class UserListingComponent {
         email: this.selectedUser.email,
         phoneNumber: this.selectedUser.phoneNumber,
         isActive: this.selectedUser.isActive,
+        roleId: this.selectedUser.roleId,
+        departmentId: this.selectedUser.departmentId,
       });
       this.userForm.get('passwordHash')?.clearValidators();
       this.userForm.get('passwordHash')?.updateValueAndValidity();
@@ -87,6 +95,8 @@ export class UserListingComponent {
         email: '',
         phoneNumber: '',
         isActive: true,
+        roleId: '',
+        departmentId: '',
       });
       this.userForm.get('passwordHash')?.setValidators(Validators.required);
       this.userForm.get('passwordHash')?.updateValueAndValidity();
@@ -119,6 +129,28 @@ export class UserListingComponent {
       error: () => {
         this.error = 'Failed to load users';
         this.loading = false;
+      },
+    });
+  }
+
+  fetchUserRoles() {
+    this._userService.getAllUserRoles().subscribe({
+      next: (response) => {
+        this.roles = response.data;
+      },
+      error: (err) => {
+        console.error('Error fetching user roles:', err);
+      },
+    });
+  }
+
+  fetchDepartments() {
+    this._departmentService.getAllDepartments().subscribe({
+      next: (response) => {
+        this.departments = response.data;
+      },
+      error: (err) => {
+        console.error('Error fetching departments:', err);
       },
     });
   }

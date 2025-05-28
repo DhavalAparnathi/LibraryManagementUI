@@ -72,7 +72,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let book of books; let i = index" class="border-b">
-        <td>{{ i + 1 }}</td>
+        <td>{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
         <td>
           {{ book.name }}
           <span
@@ -152,11 +152,11 @@
 
 <div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
   <div class="modal-box" (click)="$event.stopPropagation()">
-    <h2 class="text-xl font-bold mb-4">
+    <h2 class="text-xl font-bold mb-3">
       {{ selectedBook?.id ? "Edit Book" : "Add Book" }}
     </h2>
     <form [formGroup]="bookForm" (ngSubmit)="submitBookForm()">
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="block font-medium mb-1">Name*</label>
         <input
           placeholder="Enter book name"
@@ -171,7 +171,7 @@
           Name is required.
         </div>
       </div>
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="block font-medium mb-1">Author*</label>
         <input
           placeholder="Enter book author"
@@ -188,7 +188,7 @@
           Author is required.
         </div>
       </div>
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="block font-medium mb-1">Genre</label>
         <select formControlName="genreId" class="input-bordered">
           <option value="">Select Genre</option>
@@ -206,7 +206,7 @@
         </div>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="block font-medium mb-1">Total Copies*</label>
         <input
           formControlName="totalCopies"
@@ -233,7 +233,7 @@
         </div>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="block font-medium mb-1">Available Copies</label>
         <input
           formControlName="availableCopies"

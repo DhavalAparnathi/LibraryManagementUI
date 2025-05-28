@@ -57,4 +57,8 @@ export class DashboardComponent {
   navigateToSubjects() {
     this._router.navigate(['/dashboard/subjects']);
   }
+
+  isHomeRoute(): boolean {
+    return this._router.url === '/dashboard/home';
+  }
 }

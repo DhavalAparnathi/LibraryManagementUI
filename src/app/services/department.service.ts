@@ -33,6 +33,12 @@ export class DepartmentService {
     );
   }
 
+  getAllDepartments(): Observable<ApiResponse<string[]>> {
+    return this.http.get<ApiResponse<string[]>>(
+      `${this.baseUrl}/${ApiEndpoints.DEPARTMENTS_GET_ALL}`
+    );
+  }
+
   //   getSubjects(requestBody: any): Observable<ApiResponse<PaginatedListData>> {
   //     return this.http.post<ApiResponse<PaginatedListData>>(
   //       `${this.baseUrl}/${ApiEndpoints.SUBJECT_LIST}`,
@@ -49,6 +55,13 @@ export class DepartmentService {
   deleteSubject(subjectId: number) {
     return this.http.delete(
       `${this.baseUrl}/${ApiEndpoints.SUBJECTS}/${subjectId}`
+    );
+  }
+
+  upsertSubject(subject: any) {
+    return this.http.post(
+      `${this.baseUrl}/${ApiEndpoints.UPSERT_SUBJECT}`,
+      subject
     );
   }
 }

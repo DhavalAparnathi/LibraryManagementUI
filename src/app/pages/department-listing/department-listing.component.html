@@ -43,6 +43,7 @@
         <th>Sr No</th>
         <th>Department Name</th>
         <th>Description</th>
+        <th>Created Date</th>
         <!-- <th>HOD ID</th> -->
         <th>Actions</th>
       </tr>
@@ -52,9 +53,10 @@
         *ngFor="let department of departments; let i = index"
         class="border-b"
       >
-        <td>{{ i + 1 }}</td>
+        <td>{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
         <td>{{ department.departmentName }}</td>
         <td>{{ department.description }}</td>
+        <td>{{ department.createdDate | date : defaultDateFormat }}</td>
         <!-- <td>{{ department.hodUserId }}</td> -->
         <td>
           <button

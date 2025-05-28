@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { DepartmentService, ToastService } from '../../services';
+import { DATE_FORMAT } from '../../utils';
 
 @Component({
   selector: 'app-department-listing',
@@ -32,6 +33,7 @@ export class DepartmentListingComponent {
   pageSize = 5;
   totalPages = 1;
   totalCount = 0;
+  defaultDateFormat = DATE_FORMAT.DD_MMM_YYYY;
 
   constructor(
     private _departmentService: DepartmentService,
