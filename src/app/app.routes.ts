@@ -4,6 +4,7 @@ import {
   BookListingComponent,
   DashboardComponent,
   DepartmentListingComponent,
+  DepartmentTimetableComponent,
   HomeComponent,
   SubjectsListingComponent,
   UserListingComponent,
@@ -45,6 +46,11 @@ export const routes: Routes = [
       {
         path: 'departments',
         component: DepartmentListingComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'timetable',
+        component: DepartmentTimetableComponent,
         canActivate: [AuthGuard],
       },
       {

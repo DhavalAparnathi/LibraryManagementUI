@@ -39,12 +39,12 @@ export class DepartmentService {
     );
   }
 
-  //   getSubjects(requestBody: any): Observable<ApiResponse<PaginatedListData>> {
-  //     return this.http.post<ApiResponse<PaginatedListData>>(
-  //       `${this.baseUrl}/${ApiEndpoints.SUBJECT_LIST}`,
-  //       requestBody
-  //     );
-  //   }
+  getSubjectList(requestBody: any): Observable<ApiResponse<PaginatedListData>> {
+    return this.http.post<ApiResponse<PaginatedListData>>(
+      `${this.baseUrl}/${ApiEndpoints.SUBJECT_LIST}`,
+      requestBody
+    );
+  }
 
   getAllSubjects(): Observable<ApiResponse<string[]>> {
     return this.http.get<ApiResponse<string[]>>(
@@ -62,6 +62,12 @@ export class DepartmentService {
     return this.http.post(
       `${this.baseUrl}/${ApiEndpoints.UPSERT_SUBJECT}`,
       subject
+    );
+  }
+
+  getTimetable(departmentId: number): Observable<ApiResponse<any[]>> {
+    return this.http.get<ApiResponse<any[]>>(
+      `${this.baseUrl}/${ApiEndpoints.TIMETABLE}/${departmentId}/get-timetable`
     );
   }
 }

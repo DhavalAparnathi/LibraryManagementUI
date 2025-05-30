@@ -123,6 +123,7 @@
           formControlName="userName"
           type="text"
           class="input-bordered"
+          autocomplete="off"
         />
         <div
           *ngIf="
@@ -145,6 +146,7 @@
           formControlName="passwordHash"
           [type]="passwordVisible ? 'text' : 'password'"
           class="input-bordered"
+          autocomplete="new-password"
         />
         <button
           type="button"
@@ -172,6 +174,7 @@
           formControlName="email"
           type="email"
           class="input-bordered"
+          autocomplete="off"
         />
         <div
           *ngIf="
@@ -190,6 +193,7 @@
           formControlName="phoneNumber"
           type="text"
           class="input-bordered"
+          autocomplete="off"
         />
         <div
           *ngIf="

@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { DepartmentService, ToastService } from '../../services';
+import { DepartmentService, ToastService, UserService } from '../../services';
 import { DATE_FORMAT } from '../../utils';
 
 @Component({
@@ -26,7 +26,7 @@ export class DepartmentListingComponent {
   isAdmin = false;
   showModal = false;
   selectedDepartment: any = null;
-  filters = { departmentName: '' };
+  filters = { departmentName: '', hodUserName: '' };
   sortColumn = 'DepartmentName';
   sortDirection = 'ASC';
   pageNumber = 1;
@@ -37,6 +37,7 @@ export class DepartmentListingComponent {
 
   constructor(
     private _departmentService: DepartmentService,
+    private _userService: UserService,
     private _toast: ToastService,
     private _fb: FormBuilder
   ) {
@@ -44,7 +45,7 @@ export class DepartmentListingComponent {
       departmentId: [0],
       departmentName: ['', Validators.required],
       description: ['', Validators.required],
-      hodUserId: [0],
+      hodUserId: ['', Validators.required],
     });
   }
 
@@ -55,6 +56,7 @@ export class DepartmentListingComponent {
       this.isAdmin = decoded?.role === 'Admin';
     }
     this.fetchDepartments();
+    // this.fetchUsersByRole();
   }
 
   openModal(department?: any) {
@@ -72,7 +74,7 @@ export class DepartmentListingComponent {
         departmentId: 0,
         departmentName: '',
         description: '',
-        hodUserId: 0,
+        hodUserId: '',
       });
     }
     this.showModal = true;
@@ -122,6 +124,17 @@ export class DepartmentListingComponent {
       });
     }
   }
+
+  // fetchUsersByRole() {
+  //   this._userService.getUsersByRole(UserRole.HOD.toString()).subscribe({
+  //     next: (response) => {
+  //       this.users = response.data;
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching users', err);
+  //     },
+  //   });
+  // }
 
   onFilterChange() {
     this.pageNumber = 1;

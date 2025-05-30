@@ -14,7 +14,11 @@
         />
       </svg>
     </span>
-    <span class="active-link text-light" (click)="navigateToBooks()">
+    <span
+      *ngIf="isStudent || isAdmin"
+      class="active-link text-light"
+      (click)="navigateToBooks()"
+    >
       Book List
     </span>
     <span
@@ -37,6 +41,13 @@
       (click)="navigateToSubjects()"
     >
       Subjects List
+    </span>
+    <span
+      *ngIf="isHod"
+      class="active-link text-light"
+      (click)="navigateToDepartments()"
+    >
+      My Department
     </span>
   </div>
   <!-- <span class="text-college fs-3 fw-bold" (click)="navigateToDashboard()">

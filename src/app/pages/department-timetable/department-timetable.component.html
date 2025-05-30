@@ -1,0 +1,36 @@
+<div class="department-list-container">
+  <div class="d-flex justify-content-between">
+    <h2 class="text-xl font-bold mb-4">Department Timetable</h2>
+    <!-- <button
+      *ngIf="isAdmin || isHod"
+      class="btn btn-success mb-4"
+      (click)="openModal()"
+    >
+      Add Timetable
+    </button> -->
+  </div>
+
+  <div class="timetable">
+    <div *ngFor="let day of timetableData">
+      <h5>Day {{ day.dayId }}</h5>
+
+      <div>
+        <div class="slot-card">
+          <div class="period">
+            <strong>Period {{ day.period }}:</strong>
+            {{ day.subjectName }}
+          </div>
+
+          <div class="details">
+            Teacher: {{ day.teacherName }}
+
+            <span *ngIf="!!day.assistantTeacherId">
+              | Assistant: {{ day.assistantTeacherName }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
+  </div>
+</div>

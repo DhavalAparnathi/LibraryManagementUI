@@ -12,6 +12,8 @@ import { AuthService, ToastService } from '../../services';
 })
 export class DashboardComponent {
   isAdmin = false;
+  isHod = false;
+  isStudent = false;
   currentRole: string = '';
 
   constructor(
@@ -26,6 +28,8 @@ export class DashboardComponent {
       const decoded = JSON.parse(atob(token.split('.')[1]));
       this.currentRole = decoded?.role || 'Student';
       this.isAdmin = this.currentRole === 'Admin';
+      this.isHod = this.currentRole === 'HOD';
+      this.isStudent = this.currentRole === 'Student';
     }
   }
 

@@ -42,4 +42,10 @@ export class UserService {
       `${this.baseUrl}/${ApiEndpoints.USER_GET_ALL_ROLES}`
     );
   }
+
+  // getUsersByRole(roleId: string): Observable<ApiResponse<string[]>> {
+  //   return this.http.get<ApiResponse<string[]>>(
+  //     `${this.baseUrl}/${ApiEndpoints.GET_USERS_BY_ROLE}/${roleId}`
+  //   );
+  // }
 }

@@ -1,9 +1,22 @@
 <div class="subject-list-container">
   <div class="d-flex justify-content-between">
     <h2 class="text-xl font-bold mb-4">Subject List</h2>
-    <button *ngIf="isAdmin" class="btn btn-success mb-4" (click)="openModal()">
-      Add Subject
-    </button>
+    <div class="d-flex gap-3">
+      <button
+        *ngIf="isAdmin || isHod"
+        class="btn btn-success mb-4"
+        (click)="navigateToTimetable()"
+      >
+        View Timetable
+      </button>
+      <button
+        *ngIf="isAdmin"
+        class="btn btn-success mb-4"
+        (click)="openModal()"
+      >
+        Add Subject
+      </button>
+    </div>
   </div>
 
   <div class="d-flex justify-content-between mb-3">

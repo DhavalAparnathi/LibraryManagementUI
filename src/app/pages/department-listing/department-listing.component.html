@@ -9,8 +9,16 @@
   <div class="d-flex justify-content-between mb-3">
     <input
       type="text"
-      placeholder="Search by user name"
+      placeholder="Search by department name"
       [(ngModel)]="filters.departmentName"
+      (input)="onFilterChange()"
+      class="input-bordered me-2"
+    />
+
+    <input
+      type="text"
+      placeholder="Search by hod user name"
+      [(ngModel)]="filters.hodUserName"
       (input)="onFilterChange()"
       class="input-bordered me-2"
     />
@@ -21,6 +29,7 @@
       class="input-bordered me-2"
     >
       <option value="DepartmentName">Sort by Department Name</option>
+      <option value="HodUserName">Sort by Hod Name</option>
     </select>
 
     <select
@@ -44,7 +53,7 @@
         <th>Department Name</th>
         <th>Description</th>
         <th>Created Date</th>
-        <!-- <th>HOD ID</th> -->
+        <th>HOD Name</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -57,7 +66,7 @@
         <td>{{ department.departmentName }}</td>
         <td>{{ department.description }}</td>
         <td>{{ department.createdDate | date : defaultDateFormat }}</td>
-        <!-- <td>{{ department.hodUserId }}</td> -->
+        <td>{{ department.hodUserName }}</td>
         <td>
           <button
             class="btn btn-sm btn-info cursor-pointer me-2"
@@ -145,8 +154,8 @@
         <label class="block font-medium mb-1">HOD</label>
         <select formControlName="hodUserId" class="input-bordered">
           <option value="">Select HOD</option>
-          <option *ngFor="let hod of users" [value]="hod.hodUserId">
-            {{ hod.name }}
+          <option *ngFor="let hod of users" [value]="hod.userId">
+            {{ hod.userName }}
           </option>
         </select>
         <div

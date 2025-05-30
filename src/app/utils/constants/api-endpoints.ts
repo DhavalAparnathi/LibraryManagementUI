@@ -14,6 +14,7 @@ export const ApiEndpoints = {
   UPSERT_USER: 'users/upsert',
   USER_LIST: 'users/list',
   USER_GET_ALL_ROLES: 'users/get-all-roles',
+  // GET_USERS_BY_ROLE: 'users/get-users-by-role',
 
   DEPARTMENTS: 'departments',
   DEPARTMENTS_LIST: 'departments/list',
@@ -21,7 +22,8 @@ export const ApiEndpoints = {
   UPSERT_DEPARTMENT: 'departments/upsert',
 
   SUBJECTS: 'subjects',
-  // SUBJECT_LIST: 'subjects/list',
+  SUBJECT_LIST: 'subjects/list',
   SUBJECT_GET_ALL: 'subjects/get-all',
+  TIMETABLE: 'timetable',
   UPSERT_SUBJECT: 'subjects/upsert',
 };

@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { DepartmentService, ToastService } from '../../services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-subjects-listing',
@@ -23,9 +24,10 @@ export class SubjectsListingComponent {
   loading = false;
   error = '';
   isAdmin = false;
+  isHod = false;
   showModal = false;
   selectedSubject: any = null;
-  filters = { subjectName: '' };
+  filters = { subjectName: '', departmentId: 0, year: '' };
   sortColumn = 'SubjectName';
   sortDirection = 'ASC';
   pageNumber = 1;
@@ -36,7 +38,8 @@ export class SubjectsListingComponent {
   constructor(
     private _departmentService: DepartmentService,
     private _toast: ToastService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _router: Router
   ) {
     this.subjectForm = this._fb.group({
       subjectId: [0],
@@ -51,6 +54,7 @@ export class SubjectsListingComponent {
     if (token) {
       const decoded = JSON.parse(atob(token.split('.')[1]));
       this.isAdmin = decoded?.role === 'Admin';
+      this.isHod = decoded?.role === 'HOD';
     }
     this.fetchAllSubjects();
     this.fetchDepartments();
@@ -92,12 +96,12 @@ export class SubjectsListingComponent {
 
     this.loading = true;
 
-    this._departmentService.getAllSubjects().subscribe({
+    this._departmentService.getSubjectList(requestBody).subscribe({
       next: (response) => {
-        // this.subjects = response.data.items;
-        // this.totalCount = response.data.totalCount;
-        // this.totalPages = Math.ceil(this.totalCount / this.pageSize);
-        this.subjects = response.data;
+        this.subjects = response.data.items;
+        this.totalCount = response.data.totalCount;
+        this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+        // this.subjects = response.data;
         this.loading = false;
       },
       error: () => {
@@ -184,5 +188,9 @@ export class SubjectsListingComponent {
         this._toast.showError('Failed to save subject');
       },
     });
+  }
+
+  navigateToTimetable() {
+    this._router.navigate(['/dashboard/timetable']);
   }
 }
