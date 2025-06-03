@@ -45,7 +45,7 @@ export class DepartmentListingComponent {
       departmentId: [0],
       departmentName: ['', Validators.required],
       description: ['', Validators.required],
-      hodUserId: ['', Validators.required],
+      hodUserId: ['', this.selectedDepartment ? Validators.required : []],
     });
   }
 
@@ -168,6 +168,12 @@ export class DepartmentListingComponent {
 
     const formValue = this.departmentForm.getRawValue();
 
+    // If adding (no selectedDepartment), pass NULL for hodUserId
+    if (!this.selectedDepartment) {
+      formValue.hodUserId = null;
+    }
+
+    // If no departmentId or 0, remove it to let backend treat it as new
     if (!formValue.departmentId || formValue.departmentId === 0) {
       delete formValue.departmentId;
     }

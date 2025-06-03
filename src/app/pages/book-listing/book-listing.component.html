@@ -166,7 +166,7 @@
         />
         <div
           *ngIf="bookForm.get('name')?.touched && bookForm.get('name')?.invalid"
-          class="text-danger text-sm"
+          class="text-red-600 text-sm"
         >
           Name is required.
         </div>
@@ -183,7 +183,7 @@
           *ngIf="
             bookForm.get('author')?.touched && bookForm.get('author')?.invalid
           "
-          class="text-danger text-sm"
+          class="text-red-600 text-sm"
         >
           Author is required.
         </div>
@@ -200,7 +200,7 @@
           *ngIf="
             bookForm.get('genreId')?.touched && bookForm.get('genreId')?.invalid
           "
-          class="text-danger text-sm"
+          class="text-red-600 text-sm"
         >
           Genre is required.
         </div>
@@ -218,7 +218,7 @@
             bookForm.get('totalCopies')?.touched &&
             (bookForm.get('totalCopies')?.invalid || bookForm.errors?.['totalLessThanIssued'])
           "
-          class="text-danger text-sm"
+          class="text-red-600 text-sm"
         >
           <span *ngIf="bookForm.get('totalCopies')?.hasError('required')">
             Total Copies is required.
@@ -245,7 +245,7 @@
             bookForm.get('availableCopies')?.touched &&
             (bookForm.get('availableCopies')?.invalid || bookForm.errors?.['availableExceedsTotal'] || bookForm.errors?.['invalidAvailableCount'])
           "
-          class="text-danger text-sm"
+          class="text-red-600 text-sm"
         >
           <span *ngIf="bookForm.get('availableCopies')?.hasError('required')">
             Available Copies is required.

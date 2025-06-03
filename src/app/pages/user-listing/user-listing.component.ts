@@ -22,10 +22,13 @@ export class UserListingComponent {
   users: any[] = [];
   roles: any[] = [];
   departments: any[] = [];
+  allDepartments: any[] = [];
+  // departments: any[] = [];
   loading = false;
   isAdmin = false;
   passwordVisible = false;
   showModal = false;
+  noUnassignedDepartments: boolean = false;
   selectedUser: any = null;
   error = '';
   sortColumn = 'UserName';
@@ -65,6 +68,11 @@ export class UserListingComponent {
     this.fetchUsers();
     this.fetchUserRoles();
     this.fetchDepartments();
+
+    this.userForm.get('roleId')?.valueChanges.subscribe(() => {
+      this.updateDepartmentsDropdown();
+      this.userForm.patchValue({ departmentId: '' });
+    });
   }
 
   togglePasswordVisibility() {
@@ -87,6 +95,7 @@ export class UserListingComponent {
       });
       this.userForm.get('passwordHash')?.clearValidators();
       this.userForm.get('passwordHash')?.updateValueAndValidity();
+      this.updateDepartmentsDropdown();
     } else {
       this.userForm.reset({
         id: 0,
@@ -100,6 +109,7 @@ export class UserListingComponent {
       });
       this.userForm.get('passwordHash')?.setValidators(Validators.required);
       this.userForm.get('passwordHash')?.updateValueAndValidity();
+      this.departments = [...this.allDepartments];
     }
     this.showModal = true;
   }
@@ -147,7 +157,8 @@ export class UserListingComponent {
   fetchDepartments() {
     this._departmentService.getAllDepartments().subscribe({
       next: (response) => {
-        this.departments = response.data;
+        this.allDepartments = response.data;
+        this.updateDepartmentsDropdown();
       },
       error: (err) => {
         console.error('Error fetching departments:', err);
@@ -194,6 +205,33 @@ export class UserListingComponent {
       },
     });
   }
+
+  updateDepartmentsDropdown() {
+    const selectedRoleId = Number(this.userForm.get('roleId')?.value);
+    if (selectedRoleId === 2) {
+      this.departments = this.allDepartments.filter(
+        (d) => d.hodUserId === null
+      );
+      this.noUnassignedDepartments = this.departments.length === 0;
+    } else {
+      this.departments = [...this.allDepartments];
+      this.noUnassignedDepartments = false;
+    }
+    this.userForm.patchValue({ departmentId: '' });
+  }
+
+  // updateDepartmentsDropdown() {
+  //   const selectedRoleId = this.userForm.get('roleId')?.value;
+  //   if (selectedRoleId === 2) {
+  //     const filtered = this.allDepartments.filter((d) => d.hodUserId === null);
+  //     this.departments = filtered;
+  //     this.noUnassignedDepartments = filtered.length === 0;
+  //   } else {
+  //     this.departments = [...this.allDepartments];
+  //     this.noUnassignedDepartments = false;
+  //   }
+  //   this.userForm.patchValue({ departmentId: '' });
+  // }
 
   onFilterChange() {
     this.pageNumber = 1;

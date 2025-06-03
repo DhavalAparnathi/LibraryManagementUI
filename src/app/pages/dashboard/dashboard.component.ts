@@ -14,6 +14,8 @@ export class DashboardComponent {
   isAdmin = false;
   isHod = false;
   isStudent = false;
+  isTeacher = false;
+  isAssistantTeacher = false;
   currentRole: string = '';
 
   constructor(
@@ -29,6 +31,8 @@ export class DashboardComponent {
       this.currentRole = decoded?.role || 'Student';
       this.isAdmin = this.currentRole === 'Admin';
       this.isHod = this.currentRole === 'HOD';
+      this.isTeacher = this.currentRole === 'Teacher';
+      this.isAssistantTeacher = this.currentRole === 'Assistant Teacher';
       this.isStudent = this.currentRole === 'Student';
     }
   }
@@ -60,6 +64,14 @@ export class DashboardComponent {
 
   navigateToSubjects() {
     this._router.navigate(['/dashboard/subjects']);
+  }
+
+  navigateToAttendance() {
+    this._router.navigate(['/dashboard/attendance']);
+  }
+
+  navigateToResetPassword() {
+    this._router.navigate(['/dashboard/reset-password']);
   }
 
   isHomeRoute(): boolean {

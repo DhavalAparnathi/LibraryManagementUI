@@ -1,0 +1,36 @@
+<div class="attendance-container">
+  <h2 class="text-xl font-semibold mb-4">Weekly Student Attendance</h2>
+  <div class="week-header grid grid-cols-8 gap-2 font-bold text-center">
+    <div>Student</div>
+    <div *ngFor="let day of weekDates">{{ day | date : "EEE dd/MM" }}</div>
+  </div>
+  <div
+    *ngFor="let student of students"
+    class="student-row grid grid-cols-8 gap-2 items-center border-b py-2"
+  >
+    {{ student.name }}
+
+    <ng-container *ngFor="let day of weekDates">
+      <div>
+        <select
+          class="w-full p-1 border rounded mb-2 me-2"
+          [(ngModel)]="attendanceMap[getKey(student.id, day)]"
+        >
+          <option *ngFor="let subject of subjects" [value]="subject.id">
+            {{ subject.name }}
+          </option>
+        </select>
+
+        <input
+          type="checkbox"
+          [(ngModel)]="attendancePresence[getKey(student.id, day)]"
+          title="Present?"
+        />
+      </div>
+    </ng-container>
+  </div>
+
+  <button type="submit" class="btn btn-primary" (click)="submitAttendance()">
+    Submit
+  </button>
+</div>

@@ -223,7 +223,7 @@
           *ngIf="
             userForm.get('roleId')?.touched && userForm.get('roleId')?.invalid
           "
-          class="text-danger text-sm"
+          class="text-red-600 text-sm"
         >
           Role is required.
         </div>
@@ -240,12 +240,15 @@
             {{ department.departmentName }}
           </option>
         </select>
+        <div *ngIf="noUnassignedDepartments" class="text-red-600 mt-1">
+          No unassigned departments found to assign the current HOD.
+        </div>
         <div
           *ngIf="
             userForm.get('departmentId')?.touched &&
             userForm.get('departmentId')?.invalid
           "
-          class="text-danger text-sm"
+          class="text-red-600 text-sm"
         >
           Department is required.
         </div>

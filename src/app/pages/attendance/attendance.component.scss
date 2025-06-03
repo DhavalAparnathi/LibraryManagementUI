@@ -1,0 +1,12 @@
+.attendance-container {
+  max-width: 1000px;
+
+  margin: auto;
+}
+
+.week-header,
+.student-row {
+  display: grid;
+
+  grid-template-columns: repeat(8, 1fr);
+}

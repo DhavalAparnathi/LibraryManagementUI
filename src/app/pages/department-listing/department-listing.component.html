@@ -150,7 +150,7 @@
         </div>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-4" *ngIf="selectedDepartment">
         <label class="block font-medium mb-1">HOD</label>
         <select formControlName="hodUserId" class="input-bordered">
           <option value="">Select HOD</option>
@@ -163,7 +163,7 @@
             departmentForm.get('hodUserId')?.touched &&
             departmentForm.get('hodUserId')?.invalid
           "
-          class="text-danger text-sm"
+          class="text-red-600 text-sm"
         >
           HOD is required.
         </div>

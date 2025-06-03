@@ -43,6 +43,13 @@
       Subjects List
     </span>
     <span
+      *ngIf="isTeacher || isAssistantTeacher"
+      class="active-link text-light"
+      (click)="navigateToAttendance()"
+    >
+      Student Attendance
+    </span>
+    <span
       *ngIf="isHod"
       class="active-link text-light"
       (click)="navigateToDepartments()"
@@ -54,6 +61,9 @@
     Tatvasoft College
   </span> -->
   <div class="d-flex align-items-center gap-3">
+    <span class="text-light active-link" (click)="navigateToResetPassword()">
+      Reset Password
+    </span>
     <span class="text-light">Current Role: {{ currentRole }} </span>
     <button (click)="onLogout()" class="btn btn-danger">Logout</button>
   </div>

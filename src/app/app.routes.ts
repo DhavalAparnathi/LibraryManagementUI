@@ -1,11 +1,13 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import {
+  AttendanceComponent,
   BookListingComponent,
   DashboardComponent,
   DepartmentListingComponent,
   DepartmentTimetableComponent,
   HomeComponent,
+  ResetPasswordComponent,
   SubjectsListingComponent,
   UserListingComponent,
   UserLoginComponent,
@@ -56,6 +58,16 @@ export const routes: Routes = [
       {
         path: 'subjects',
         component: SubjectsListingComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'reset-password',
+        component: ResetPasswordComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'attendance',
+        component: AttendanceComponent,
         canActivate: [AuthGuard],
       },
       {

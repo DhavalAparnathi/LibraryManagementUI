@@ -6,3 +6,4 @@ export * from './department-timetable/department-timetable.component';
 export * from './home/home.component';
 export * from './subjects-listing/subjects-listing.component';
 export * from './user-listing/user-listing.component';
+export * from './attendance/attendance.component';
