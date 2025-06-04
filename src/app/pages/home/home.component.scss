@@ -1,3 +1,15 @@
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .clg-img {
   background-color: rgba(0, 0, 0, 0) !important;
   background-repeat: no-repeat !important;
@@ -6,9 +18,10 @@
   background-position: center center !important;
   width: 100% !important;
   height: 100% !important;
-  opacity: 1 !important;
-  visibility: inherit !important;
   z-index: 20 !important;
+  opacity: 0;
+  animation: slideUpFadeIn 1.2s ease-out forwards;
+  animation-delay: 0.2s;
 }
 
 .home-content {

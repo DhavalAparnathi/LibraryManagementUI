@@ -1,7 +1,11 @@
 <div class="user-list-container">
   <div class="d-flex justify-content-between">
     <h2 class="text-xl font-bold mb-4">User List</h2>
-    <button *ngIf="isAdmin" class="btn btn-success mb-4" (click)="openModal()">
+    <button
+      *ngIf="!isStudent"
+      class="btn btn-success mb-4"
+      (click)="openModal()"
+    >
       Add User
     </button>
   </div>

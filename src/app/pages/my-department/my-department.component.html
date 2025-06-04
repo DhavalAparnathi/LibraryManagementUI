@@ -1,0 +1,153 @@
+<div class="subject-list-container">
+  <div class="d-flex justify-content-between">
+    <h2 class="text-xl font-bold mb-4">Subject List</h2>
+    <div class="d-flex gap-3">
+      <button
+        *ngIf="isHod"
+        class="btn btn-success mb-4"
+        (click)="navigateToTimetable()"
+      >
+        View Timetable
+      </button>
+      <button *ngIf="isHod" class="btn btn-success mb-4" (click)="openModal()">
+        Add Subject
+      </button>
+    </div>
+  </div>
+  <div class="d-flex justify-content-between mb-3">
+    <input
+      type="text"
+      placeholder="Search by subject name"
+      [(ngModel)]="filters.subjectName"
+      (input)="onFilterChange()"
+      class="input-bordered me-2"
+    />
+
+    <select
+      [(ngModel)]="sortColumn"
+      (change)="onSortChange()"
+      class="input-bordered me-2"
+    >
+      <option value="SubjectName">Sort by Subject Name</option>
+      <option value="DepartmentName">Sort by Department Name</option>
+    </select>
+
+    <select
+      [(ngModel)]="sortDirection"
+      (change)="onSortChange()"
+      class="input-bordered"
+    >
+      <option value="ASC">Asc</option>
+      <option value="DESC">Desc</option>
+    </select>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <span class="text-black">Total Subjects: {{ totalCount }}</span>
+  </div>
+
+  <table class="w-full border-collapse">
+    <thead>
+      <tr class="bg-gray-200">
+        <th>Sr No</th>
+        <th>Subject Name</th>
+        <th>Year</th>
+        <th>Department Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let subject of subjects; let i = index" class="border-b">
+        <td>{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
+        <td>{{ subject.subjectName }}</td>
+        <td>{{ subject.year }}</td>
+        <td>{{ subject.departmentName }}</td>
+        <td>
+          <button
+            class="btn btn-sm btn-info cursor-pointer me-2"
+            (click)="openModal(subject)"
+          >
+            Edit
+          </button>
+
+          <button
+            (click)="deleteSubject(subject.subjectId)"
+            class="btn btn-sm btn-danger cursor-pointer"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-end mt-3 align-items-center">
+    <button
+      class="btn btn-sm btn-secondary me-2"
+      (click)="prevPage()"
+      [disabled]="pageNumber === 1"
+    >
+      Previous
+    </button>
+    <span>Page {{ pageNumber }} of {{ totalPages }}</span>
+    <button
+      class="btn btn-sm btn-secondary ms-2"
+      (click)="nextPage()"
+      [disabled]="pageNumber === totalPages"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
+<div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <h2 class="text-xl font-bold mb-4">
+      {{ selectedSubject?.subjectId ? "Edit Subject" : "Add Subject" }}
+    </h2>
+    <form [formGroup]="subjectForm" (ngSubmit)="submitSubjectForm()">
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Subject Name*</label>
+        <input
+          placeholder="Enter subject name"
+          formControlName="subjectName"
+          type="text"
+          class="input-bordered"
+        />
+        <div
+          *ngIf="
+            subjectForm.get('subjectName')?.touched &&
+            subjectForm.get('subjectName')?.invalid
+          "
+          class="text-red-600 text-sm"
+        >
+          Subject Name is required.
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Year*</label>
+        <input
+          placeholder="Enter year"
+          formControlName="year"
+          type="text"
+          class="input-bordered"
+        />
+        <div
+          *ngIf="
+            subjectForm.get('year')?.touched && subjectForm.get('year')?.invalid
+          "
+          class="text-red-600 text-sm"
+        >
+          Year is required.
+        </div>
+      </div>
+
+      <div class="d-flex justify-end gap-2">
+        <button type="button" (click)="closeModal()" class="btn btn-secondary">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

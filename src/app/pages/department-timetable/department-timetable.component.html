@@ -1,13 +1,7 @@
 <div class="department-list-container">
   <div class="d-flex justify-content-between">
     <h2 class="text-xl font-bold mb-4">Department Timetable</h2>
-    <!-- <button
-      *ngIf="isAdmin || isHod"
-      class="btn btn-success mb-4"
-      (click)="openModal()"
-    >
-      Add Timetable
-    </button> -->
+    <button *ngIf="isHod" class="btn btn-success mb-4">Add Timetable</button>
   </div>
 
   <div class="timetable">

@@ -7,6 +7,7 @@ import {
   DepartmentListingComponent,
   DepartmentTimetableComponent,
   HomeComponent,
+  MyDepartmentComponent,
   ResetPasswordComponent,
   SubjectsListingComponent,
   UserListingComponent,
@@ -68,6 +69,11 @@ export const routes: Routes = [
       {
         path: 'attendance',
         component: AttendanceComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'my-department',
+        component: MyDepartmentComponent,
         canActivate: [AuthGuard],
       },
       {

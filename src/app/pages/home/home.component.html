@@ -1,34 +1,20 @@
 <div class="d-flex flex-column gap-3">
   <img
-    class="clg-img"
+    class="clg-img slide-up"
     src="https://www.ldrp.ac.in/wp-content/uploads/LDRP-Optimized.png"
     alt="College Photo"
   />
-  <div class="fs-5 home-content">
+
+  <div class="about fs-5 px-4">
     Tatvasoft - ITR, Ahmedabad was established in 2001. The college has made
-    steady progress during the past few years of its existence. Established as a
-    pace setting Institute of Technical Education imparting undergraduate and
-    postgraduate education, it has played a vital role in engineering colleges
-    of Gujarat. In this mission today it has progressed to offering several
-    B.E., M.B.A. and M.C.A. Programs and facilities.
+    steady progress during the past few years of its existence...
   </div>
-  <div class="fs-6 home-content">
-    <span class="fs-5">Features:</span>
-    <li>Admission through AC-PC procedure (No Management / NRI Quota).</li>
-    <li>Means & Meritorious Scholarship to the students.</li>
-    <li>Air Condition Library.</li>
-    <li>Transportation Facility available from all the routes of Ahmedabad</li>
-    <li>
-      Boys & Girls Separate Hostel Facility available. ATM Facility in the
-      campus.
-    </li>
-    <li>
-      Fees as per Fee Regulatory Committee. Research Project Grants for
-      faculties & students.
-    </li>
-    <li>Internet: 1 GBPS Internet with Fiber optics line / Wi-Fi Campus</li>
-    <li>Placements: Project & Job placement Assistance</li>
-    <li>MOU for Research & Development with well known Industries</li>
+
+  <div class="features px-4">
+    <h5 class="mb-2">Features:</h5>
+    <ul>
+      <li *ngFor="let feature of features">{{ feature }}</li>
+    </ul>
   </div>
 
   <footer class="w-100 bg-dark text-light py-4">
@@ -47,9 +33,6 @@
           <h4 class="fw-bold mb-3">Contact</h4>
           <p class="mb-1">
             <strong>Email:</strong>
-            <!-- <a href="tatvasoftitr@gmail.com" class="text-light"
-              >tatvasoftitr@gmail.com</a
-            > -->
           </p>
           <p class="mb-1"><strong>Phone:</strong> +91 - 079 - 23241492</p>
           <p class="mb-1"><strong>Fax:</strong> +91 - 079 - 23241493</p>

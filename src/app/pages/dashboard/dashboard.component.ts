@@ -77,4 +77,8 @@ export class DashboardComponent {
   isHomeRoute(): boolean {
     return this._router.url === '/dashboard/home';
   }
+
+  navigateToMyDepartment() {
+    this._router.navigate(['/dashboard/my-department']);
+  }
 }

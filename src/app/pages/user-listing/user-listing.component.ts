@@ -26,6 +26,7 @@ export class UserListingComponent {
   // departments: any[] = [];
   loading = false;
   isAdmin = false;
+  isStudent = false;
   passwordVisible = false;
   showModal = false;
   noUnassignedDepartments: boolean = false;
@@ -63,6 +64,7 @@ export class UserListingComponent {
     if (token) {
       const decoded = JSON.parse(atob(token.split('.')[1]));
       this.isAdmin = decoded?.role === 'Admin';
+      this.isStudent = decoded?.role === 'Student';
     }
 
     this.fetchUsers();

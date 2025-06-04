@@ -22,7 +22,7 @@
       Book List
     </span>
     <span
-      *ngIf="isAdmin"
+      *ngIf="!isStudent"
       class="active-link text-light"
       (click)="navigateToUsers()"
     >
@@ -52,14 +52,11 @@
     <span
       *ngIf="isHod"
       class="active-link text-light"
-      (click)="navigateToDepartments()"
+      (click)="navigateToMyDepartment()"
     >
       My Department
     </span>
   </div>
-  <!-- <span class="text-college fs-3 fw-bold" (click)="navigateToDashboard()">
-    Tatvasoft College
-  </span> -->
   <div class="d-flex align-items-center gap-3">
     <span class="text-light active-link" (click)="navigateToResetPassword()">
       Reset Password

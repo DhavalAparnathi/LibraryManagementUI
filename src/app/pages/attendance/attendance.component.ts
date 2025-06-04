@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AttendanceRecord, Student, Subject } from '../../models';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AttendanceRecord, Student, Subject } from '../../models';
+import { AttendanceService, ToastService } from '../../services';
 
 @Component({
   selector: 'app-attendance',
@@ -11,38 +12,41 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./attendance.component.scss'],
 })
 export class AttendanceComponent implements OnInit {
-  students: Student[] = [
-    { id: 1, name: 'Alice Johnson' },
-
-    { id: 2, name: 'Bob Smith' },
-  ];
-
-  subjects: Subject[] = [
-    { id: 101, name: 'Math' },
-
-    { id: 102, name: 'Science' },
-
-    { id: 103, name: 'English' },
-  ];
+  students: Student[] = [];
+  subjects: Subject[] = [];
 
   weekDates: string[] = [];
   attendanceMap: { [key: string]: number } = {};
   attendancePresence: { [key: string]: boolean } = {};
 
+  constructor(
+    private _attendanceService: AttendanceService,
+    private _toast: ToastService
+  ) {}
+
   ngOnInit(): void {
     this.generateWeekDates();
+    this.loadDataFromApi();
+  }
+
+  loadDataFromApi(): void {
+    this._attendanceService.getStudentAndSubjectList().subscribe({
+      next: (res) => {
+        this.students = res.students;
+        this.subjects = res.subjects;
+      },
+      error: (err) => {
+        console.error('Failed to fetch data', err);
+      },
+    });
   }
 
   generateWeekDates(): void {
     const today = new Date();
-
     const startOfWeek = today.getDate() - today.getDay() + 1;
-
     for (let i = 0; i < 7; i++) {
       const date = new Date();
-
       date.setDate(startOfWeek + i);
-
       this.weekDates.push(date.toISOString().split('T')[0]);
     }
   }
@@ -56,20 +60,16 @@ export class AttendanceComponent implements OnInit {
 
     this.students.forEach((student) => {
       this.weekDates.forEach((date) => {
-        const key = this.getKey(student.id, date);
+        const key = this.getKey(student.studentId, date);
 
-        const subjectId = this.attendanceMap[key];
-
+        const subjectId = Number(this.attendanceMap[key]);
         const isPresent = this.attendancePresence[key] ?? false;
 
         if (subjectId) {
           records.push({
-            studentId: student.id,
-
+            studentId: student.studentId,
             subjectId,
-
             date,
-
             isPresent,
           });
         }
@@ -77,5 +77,14 @@ export class AttendanceComponent implements OnInit {
     });
 
     console.log('Submitted Attendance Records:', records);
+
+    this._attendanceService.markAttendance(records).subscribe({
+      next: () => {
+        this._toast.showSuccess('Marked Attendance successfully');
+      },
+      error: () => {
+        this._toast.showError('Failed to mark the attendance');
+      },
+    });
   }
 }
